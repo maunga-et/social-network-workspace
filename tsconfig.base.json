@@ -14,7 +14,12 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@social-network-workspace/auth": ["libs/auth/src/index.ts"],
+      "@social-network-workspace/core": ["libs/core/src/index.ts"],
+      "@social-network-workspace/posts": ["libs/posts/src/index.ts"],
+      "@social-network-workspace/ui": ["libs/ui/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

@@ -1,0 +1,112 @@
+.post-card {
+  display: flex;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1rem;
+  transition: box-shadow 0.2s ease;
+  max-width: 700px;
+}
+
+.post-card:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.vote-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  margin-right: 1rem;
+}
+
+.vote-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  line-height: 1;
+  color: #999;
+  transition: color 0.2s;
+}
+
+.vote-btn:hover {
+  color: #ff4500;
+}
+
+.vote-btn.active {
+  color: #ff4500;
+}
+
+.vote-count {
+  font-weight: bold;
+  margin: 0.3rem 0;
+  color: #444;
+}
+
+.post-content {
+  flex: 1;
+}
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.post-meta {
+  font-size: 0.85rem;
+  color: #777;
+  margin: 0;
+}
+
+.status {
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.status.published {
+  background: #e6f7ec;
+  color: #1b5e20;
+}
+
+.status.unpublished {
+  background: #fdecea;
+  color: #b71c1c;
+}
+
+.post-title {
+  margin: 0.3rem 0;
+  color: #222;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.post-body {
+  color: #444;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 0.8rem;
+}
+
+.post-footer {
+  display: flex;
+  gap: 1rem;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  color: #555;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.action-btn:hover {
+  color: #ff4500;
+}
