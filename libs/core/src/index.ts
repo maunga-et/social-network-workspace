@@ -7,3 +7,4 @@ export * from './lib/state/auth/auth.effects';
 export * from './lib/api/post.service';
 export * from './lib/state/posts/post.store';
 export * from './lib/state/posts/posts.effects';
+export * from './lib/guards/auth.guard'

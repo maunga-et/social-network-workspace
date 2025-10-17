@@ -1,101 +1,187 @@
-# SocialNetworkWorkspace
+# The Social Network
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+**The Social Network** is a modern social networking web application built with Angular, Nx, and NgRx. It allows users to register, login, create posts, vote on posts, and interact with other users’ content in a streamlined and reactive environment.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+## Table of Contents
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+1. [Project Overview](#project-overview)  
+2. [Functionality](#functionality)  
+3. [Tech Stack](#tech-stack)  
+4. [Project Structure](#project-structure)  
+5. [Setup Instructions](#setup-instructions)  
+6. [NgRx State Management](#ngrx-state-management)  
+7. [Authentication](#authentication)  
+8. [Post Management](#post-management)  
+9. [Styling](#styling)
 
-## Run tasks
+## Project Overview
 
-To run the dev server for your app, use:
+Postify is designed to simulate a social network platform where users can:
 
-```sh
-npx nx serve social-app
+- Register and login
+- Create posts
+- Upvote and downvote posts
+- Delete their own posts
+- View a feed of posts from all users
+
+The app leverages a **modular Nx workspace** structure with libraries for core functionality, authentication, post management, and reusable UI components.
+
+## Functionality
+
+- **User Registration & Login**: Users can register and login. Authenticated users receive a JWT token stored in the NgRx store.  
+- **Posts Feed**: Display a feed of posts using `FeedPageComponent`.  
+- **Post Creation**: Users can create posts with a title, content, and publish status.  
+- **Voting System**: Upvote and downvote posts. The app handles already voted scenarios and shows per-post loading spinners.  
+- **Post Deletion**: Users can delete only their own posts.  
+- **Optimistic UI Updates**: Voting updates in the UI immediately while the backend request is processed.  
+
+## Tech Stack
+
+- **Frontend**: Angular 17 (Standalone Components)  
+- **State Management**: NgRx (Store, Effects)  
+- **Styling**: Tailwind CSS  
+- **HTTP Client**: Angular HttpClient  
+- **Workspace**: Nx Monorepo  
+- **Routing**: Angular Router  
+- **Language**: TypeScript  
+- **Testing**: Jest (unit testing) / Cypress (optional e2e)
+
+## Project Structure
+
 ```
 
-To create a production bundle:
+postify/
+├── apps/
+│   └── postify-app/
+│       ├── src/
+│       │   ├── app/
+│       │   │   ├── app.component.ts
+│       │   │   ├── app.component.html
+│       │   │   ├── app-routing.module.ts
+│       │   │   └── app.module.ts
+│       │   ├── assets/
+│       │   ├── environments/
+│       │   │   ├── environment.ts
+│       │   │   └── environment.prod.ts
+│       │   └── main.ts
+│       └── project.json
+│
+├── libs/
+│   ├── core/
+│   │   ├── src/
+│   │   │   ├── lib/
+│   │   │   │   ├── api/
+│   │   │   │   │   ├── auth.service.ts
+│   │   │   │   │   ├── post.service.ts
+│   │   │   │   │   └── http-interceptor.service.ts
+│   │   │   │   ├── models/
+│   │   │   │   │   ├── post.model.ts
+│   │   │   │   │   └── user.model.ts
+│   │   │   │   ├── guards/
+│   │   │   │   │   └── auth.guard.ts
+│   │   │   │   ├── utils/
+│   │   │   │   │   └── helpers.ts
+│   │   │   │   ├── state/
+│   │   │   │   │   ├── auth.store.ts
+│   │   │   │   │   └── posts.store.ts
+│   │   │   │   └── core.module.ts
+│   │   │   └── index.ts
+│
+│   ├── auth/
+│   │   ├── src/
+│   │   │   ├── lib/
+│   │   │   │   ├── login/
+│   │   │   │   │   ├── login.component.ts
+│   │   │   │   │   ├── login.component.html
+│   │   │   │   │   └── login.component.scss
+│   │   │   │   ├── register/
+│   │   │   │   │   ├── register.component.ts
+│   │   │   │   │   ├── register.component.html
+│   │   │   │   │   └── register.component.scss
+│   │   │   │   └── auth.module.ts
+│
+│   ├── posts/
+│   │   ├── src/
+│   │   │   ├── lib/
+│   │   │   │   ├── components/
+│   │   │   │   │   ├── post-list/
+│   │   │   │   │   ├── post-item/
+│   │   │   │   │   └── create-post/
+│   │   │   │   ├── pages/
+│   │   │   │   │   ├── feed-page/
+│   │   │   │   │   └── post-detail-page/
+│   │   │   │   └── posts.module.ts
+│
+│   ├── ui/
+│   │   ├── src/
+│   │   │   ├── lib/
+│   │   │   │   ├── components/
+│   │   │   │   │   ├── navbar/
+│   │   │   │   │   ├── button/
+│   │   │   │   │   └── loader/
+│   │   │   │   └── ui.module.ts
+│
+├── tools/
+├── nx.json
+├── angular.json
+├── package.json
+└── README.md
 
-```sh
-npx nx build social-app
+````
+
+## Setup Instructions
+
+1. **Install dependencies**:
+
+```bash
+npm install
+````
+
+2. **Run the application**:
+
+```bash
+nx serve social-app
 ```
 
-To see all available targets to run for a project, run:
+3. **Build for production**:
 
-```sh
-npx nx show project social-app
+```bash
+nx build social-app --prod
 ```
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+4. **Lint & Test**:
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Add new projects
-
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
-
-Use the plugin's generator to create new projects.
-
-To generate a new application, use:
-
-```sh
-npx nx g @nx/angular:app demo
+```bash
+nx lint
+nx test
 ```
 
-To generate a new library, use:
+## NgRx State Management
 
-```sh
-npx nx g @nx/angular:lib mylib
-```
+* `auth.store.ts` manages user login, registration, and token.
+* `posts.store.ts` manages posts, voting, and loading state.
+* Effects handle async operations for HTTP requests.
+* Selectors are used in components for reactive state updates.
 
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
+## Authentication
 
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+* JWT-based authentication.
+* Token stored in NgRx store and optionally localStorage.
+* Routes are protected using `AuthGuard` (`libs/core/guards/auth.guard.ts`).
 
-## Set up CI!
+## Post Management
 
-### Step 1
+* Users can **create**, **delete**, **upvote**, and **downvote** posts.
+* Optimistic UI updates for voting with per-post loading indicators.
+* Voting prevents double voting and handles backend messages like `"Already voted"`.
 
-To connect to Nx Cloud, run the following command:
+## Styling
 
-```sh
-npx nx connect
-```
+* Tailwind CSS used for rapid UI development.
+* Components are responsive and use utility-first classes.
+* Post cards, buttons, modals, and feed are fully styled.
 
-Connecting to Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
+## Issues
 
-- [Remote caching](https://nx.dev/ci/features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/ci/features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-### Step 2
-
-Use the following command to configure a CI workflow for your workspace:
-
-```sh
-npx nx g ci-workflow
-```
-
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+* Downvoting is not working because at the time of writing this app the API endpoint was not working.
+* There is not much error handling and testing due to limited time.
