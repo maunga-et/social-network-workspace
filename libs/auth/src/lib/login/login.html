@@ -2,23 +2,23 @@
   <div class="w-full max-w-md bg-white rounded-2xl p-8 shadow-md">
     <h2 class="text-2xl font-bold text-center mb-6">Log In</h2>
 
-    <div *ngIf="error$ | async as error" class="text-red-600 mb-4 text-center">
+    @if (error$ | async; as error) {
+    <div class="text-red-600 mb-4 text-center">
       {{ error }}
     </div>
+    }
 
-    <form (ngSubmit)="login()">
+    <form (ngSubmit)="login()" [formGroup]="loginForm">
       <input
         type="text"
-        [(ngModel)]="username"
-        name="username"
+        formControlName="username"
         placeholder="Username"
         required
         class="w-full mb-4 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
       />
       <input
         type="password"
-        [(ngModel)]="password"
-        name="password"
+        formControlName="password"
         placeholder="Password"
         required
         class="w-full mb-4 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -27,16 +27,17 @@
       <button
         type="submit"
         class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition disabled:opacity-50"
-        [disabled]="!(username && password) || (loading$ | async)"
+        [disabled]="loading"
       >
-        <span *ngIf="loading$ | async; else notLoading">Logging in...</span>
-        <ng-template #notLoading>Log In</ng-template>
+        {{ loading ? 'Logging in...' : 'Login' }}
       </button>
     </form>
 
     <p class="text-center text-gray-600 mt-4">
       New to The Social Network?
-      <a routerLink="/register" class="text-blue-500 hover:underline">Sign Up</a>
+      <a routerLink="/register" class="text-blue-500 hover:underline"
+        >Sign Up</a
+      >
     </p>
   </div>
 </div>

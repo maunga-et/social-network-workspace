@@ -1,24 +1,26 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { CommonModule, NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { Observable, combineLatest, filter } from 'rxjs';
 import * as AuthActions from '@social-network-workspace/core';
-import { selectLoading, selectError } from '@social-network-workspace/core';
+import { selectError } from '@social-network-workspace/core';
+import { FormControl, ReactiveFormsModule, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'lib-login',
   standalone: true,
-  imports: [RouterLink, CommonModule, FormsModule, NgIf],
+  imports: [RouterLink, CommonModule, ReactiveFormsModule],
   templateUrl: './login.html',
   styleUrls: ['./login.css'],
 })
 export class Login implements OnInit {
-  username = '';
-  password = '';
+  loginForm = new FormGroup({
+    username: new FormControl(''),
+    password: new FormControl(''),
+  });
 
-  loading$!: Observable<boolean>;
+  loading = false;
   error$!: Observable<string | null>;
   user$!: Observable<any>;
 
@@ -26,13 +28,12 @@ export class Login implements OnInit {
   private router = inject(Router);
 
   ngOnInit(): void {
-    this.loading$ = this.store.select(selectLoading);
     this.error$ = this.store.select(selectError);
     this.user$ = this.store.select((state: any) => state.auth.user);
 
     // Navigate to feed when login succeeds
-    combineLatest([this.user$, this.loading$, this.error$])
-      .pipe(filter(([user, loading, error]) => !!user && !loading && !error))
+    combineLatest([this.user$, this.error$])
+      .pipe(filter(([user, error]) => !!user && !error))
       .subscribe(() => {
         console.log('Login successful, navigating to feed...');
         this.router.navigate(['/feed']);
@@ -40,12 +41,14 @@ export class Login implements OnInit {
   }
 
   login() {
-    if (!this.username || !this.password) return;
+    if (!this.loginForm.valid) return;
+
+    this.loading = true;
 
     this.store.dispatch(
       AuthActions.login({
-        username: this.username,
-        password: this.password,
+        username: this.loginForm.value.username!,
+        password: this.loginForm.value.password!,
       })
     );
   }
